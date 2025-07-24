@@ -11,7 +11,5 @@
   <ItemGroup>
     <Folder Include="src\assets\images\" />
     <Folder Include="src\assets\fonts\" />
-    <Folder Include="src\hooks\" />
-    <Folder Include="src\utiles\" />
   </ItemGroup>
 </Project>

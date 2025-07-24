@@ -1,137 +1,95 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { createTicket } from '@/services/ticketService';
-import {
-    TextField,
-    Button,
-    Box,
-    Typography,
-    Select,
-    MenuItem,
-    InputLabel,
-    FormControl,
-    CircularProgress
-} from '@mui/material';
-import { toast } from 'react-toastify';
 
-const deviceTypes = [
-    { value: 'PC', label: 'ﬂ„»ÌÊ — ‘Œ’Ì' },
-    { value: 'Laptop', label: '·«» Ê»' },
-    { value: 'Printer', label: 'ÿ«»⁄…' },
-    { value: 'Other', label: '√Œ—Ï' },
-];
+const TicketForm = ({ categories, onSubmit, isLoading }) => {
+    const [description, setDescription] = useState('');
+    const [deviceCategoryId, setDeviceCategoryId] = useState('');
+    const [deviceId, setDeviceId] = useState('');
+    const [attachment, setAttachment] = useState(null);
+    const [validationErrors, setValidationErrors] = useState({});
 
-const TicketForm = () => {
-    const [formData, setFormData] = useState({
-        description: '',
-        deviceType: '',
-        deviceId: '',
-        attachments: null,
-    });
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
-
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
-
-    const handleFileChange = (e) => {
-        setFormData({
-            ...formData,
-            attachments: e.target.files,
-        });
-    };
-
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        setLoading(true);
 
-        try {
-            await createTicket(formData);
-            toast.success(' „ ≈‰‘«¡ «· –ﬂ—… »‰Ã«Õ');
-            navigate('/dashboard');
-        } catch (error) {
-            toast.error('›‘· ›Ì ≈‰‘«¡ «· –ﬂ—…');
-        } finally {
-            setLoading(false);
+        const errors = {};
+        if (!description) errors.description = 'Ê’› «·„‘ﬂ·… „ÿ·Ê»';
+        if (!deviceCategoryId) errors.deviceCategoryId = '‰Ê⁄ «·ÃÂ«“ „ÿ·Ê»';
+
+        if (Object.keys(errors).length > 0) {
+            setValidationErrors(errors);
+            return;
         }
+
+        setValidationErrors({});
+
+        const formData = {
+            description,
+            deviceCategoryId,
+            deviceId: deviceId || undefined,
+            attachment: attachment || undefined
+        };
+
+        onSubmit(formData);
     };
 
     return (
-        <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
-            <Typography variant="h4" gutterBottom>
-                ≈‰‘«¡  –ﬂ—… ÃœÌœ…
-            </Typography>
-            <form onSubmit={handleSubmit}>
-                <FormControl fullWidth margin="normal" required>
-                    <InputLabel>‰Ê⁄ «·ÃÂ«“</InputLabel>
-                    <Select
-                        name="deviceType"
-                        value={formData.deviceType}
-                        onChange={handleChange}
-                        label="‰Ê⁄ «·ÃÂ«“"
-                    >
-                        {deviceTypes.map((type) => (
-                            <MenuItem key={type.value} value={type.value}>
-                                {type.label}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-
-                <TextField
-                    fullWidth
-                    margin="normal"
-                    label="„⁄—¯› «·ÃÂ«“ («Œ Ì«—Ì)"
-                    name="deviceId"
-                    value={formData.deviceId}
-                    onChange={handleChange}
+        <form onSubmit={handleSubmit} className="ticket-form">
+            <div className="form-group">
+                <label>Ê’› «·„‘ﬂ·… *</label>
+                <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="’› «·„‘ﬂ·… »«· ›’Ì·..."
                 />
+                {validationErrors.description && (
+                    <span className="validation-error">{validationErrors.description}</span>
+                )}
+            </div>
 
-                <TextField
-                    fullWidth
-                    margin="normal"
-                    label="Ê’› «·„‘ﬂ·…"
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    multiline
-                    rows={4}
-                    required
+            <div className="form-group">
+                <label>‰Ê⁄ «·ÃÂ«“ *</label>
+                <select
+                    value={deviceCategoryId}
+                    onChange={(e) => setDeviceCategoryId(e.target.value)}
+                >
+                    <option value="">«Œ — ‰Ê⁄ «·ÃÂ«“</option>
+                    {categories.map(category => (
+                        <option key={category.id} value={category.id}>
+                            {category.categoryName}
+                        </option>
+                    ))}
+                </select>
+                {validationErrors.deviceCategoryId && (
+                    <span className="validation-error">{validationErrors.deviceCategoryId}</span>
+                )}
+            </div>
+
+            <div className="form-group">
+                <label>„⁄—› «·ÃÂ«“ («Œ Ì«—Ì)</label>
+                <input
+                    type="text"
+                    value={deviceId}
+                    onChange={(e) => setDeviceId(e.target.value)}
+                    placeholder="√œŒ· „⁄—› «·ÃÂ«“ ≈–« ﬂ«‰ „ «Õ«"
                 />
+            </div>
 
+            <div className="form-group">
+                <label>—›⁄ „·› „—›ﬁ («Œ Ì«—Ì)</label>
                 <input
                     type="file"
-                    id="attachments"
-                    name="attachments"
-                    onChange={handleFileChange}
-                    multiple
-                    style={{ display: 'none' }}
+                    onChange={(e) => setAttachment(e.target.files[0])}
                 />
-                <label htmlFor="attachments">
-                    <Button variant="outlined" component="span" sx={{ mt: 2, mb: 2 }}>
-                        ≈—›«ﬁ „·›« 
-                    </Button>
-                </label>
-                {formData.attachments && (
-                    <Typography variant="body2">
-                        {formData.attachments.length} „·›(« ) „—›ﬁ(…)
-                    </Typography>
-                )}
+                <small>Ì„ﬂ‰ﬂ —›⁄ ’Ê—… √Ê „·› ÌÊ÷Õ «·„‘ﬂ·… («·Õœ «·√ﬁ’Ï: 5MB)</small>
+            </div>
 
-                <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{ mt: 2 }}
-                    disabled={loading}
-                >
-                    {loading ? <CircularProgress size={24} /> : '≈‰‘«¡ «· –ﬂ—…'}
-                </Button>
-            </form>
-        </Box>
+            <button
+                type="submit"
+                className="submit-btn"
+                disabled={isLoading}
+            >
+                {isLoading ? 'Ã«—Ì «·≈—”«·...' : '≈‰‘«¡ «· –ﬂ—…'}
+            </button>
+        </form>
     );
 };
 

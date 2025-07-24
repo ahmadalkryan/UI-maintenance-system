@@ -1,0 +1,86 @@
+export const ticketsData = [
+    {
+        id: 1,
+        ticketNumber: "2024-001-PC",
+        description: "«·ﬂ„»ÌÊ — ·« Ì⁄„·",
+        deviceType: "ﬂ„»ÌÊ — ‘Œ’Ì",
+        deviceId: "PC-101",
+        status: "ÃœÌœ",
+        createdAt: "2024-05-20",
+        userName: "√Õ„œ „Õ„œ",
+        department: "IT",
+        attachments: [],
+        notes: []
+    },
+    {
+        id: 2,
+        ticketNumber: "2024-002-Laptop",
+        description: "‘«‘… «··«» Ê» ·«  ⁄„·",
+        deviceType: "·«» Ê»",
+        deviceId: "LP-205",
+        status: "ﬁÌœ «·„⁄«·Ã…",
+        createdAt: "2024-05-19",
+        userName: "”«—… ⁄»œ«··Â",
+        department: "«·„»Ì⁄« ",
+        attachments: [],
+        notes: [
+            {
+                id: 1,
+                content: " „ «· Ê«’· „⁄ «·„Ê—œ ·ÿ·» ﬁÿ⁄ «·€Ì«—",
+                createdAt: "2024-05-19T14:30:00"
+            }
+        ]
+    },
+    {
+        id: 3,
+        ticketNumber: "2024-003-Printer",
+        description: "«·ÿ«»⁄… ·«  ÿ»⁄ «·√·Ê«‰",
+        deviceType: "ÿ«»⁄…",
+        deviceId: "PR-308",
+        status: "„ﬂ „·",
+        createdAt: "2024-05-18",
+        userName: "Œ«·œ ”«·„",
+        department: "«·„Õ«”»…",
+        attachments: [],
+        notes: []
+    }
+];
+
+export const usersData = [
+    {
+        id: 1,
+        name: "√Õ„œ „Õ„œ",
+        email: "ahmed@example.com",
+        department: "IT",
+        role: "employee"
+    },
+    {
+        id: 2,
+        name: "”«—… ⁄»œ«··Â",
+        email: "sara@example.com",
+        department: "«·„»Ì⁄« ",
+        role: "employee"
+    },
+    {
+        id: 3,
+        name: "Œ«·œ ”«·„",
+        email: "khaled@example.com",
+        department: "«·„Õ«”»…",
+        role: "employee"
+    },
+    {
+        id: 4,
+        name: "⁄·Ì „Õ„Êœ",
+        email: "ali@example.com",
+        department: "«·’Ì«‰…",
+        role: "admin"
+    }
+];
+
+export const deviceTypes = [
+    { value: "PC", label: "ﬂ„»ÌÊ — ‘Œ’Ì" },
+    { value: "Laptop", label: "·«» Ê»" },
+    { value: "Printer", label: "ÿ«»⁄…" },
+    { value: "Scanner", label: "„«”Õ ÷Ê∆Ì" },
+    { value: "Other", label: "√Œ—Ï" }
+];
